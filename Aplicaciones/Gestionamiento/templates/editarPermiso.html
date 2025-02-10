@@ -1,0 +1,146 @@
+{% extends "plantilla.html" %}
+{% load static %}
+{% block contenido %}
+<br>
+<main class="main d-flex justify-content-center align-items-center vh-100">
+<br><br><br><br><br><br><br>
+    <div class="container">
+        <div class="card shadow-lg p-4">
+            <h3 class="text-center mb-4 text-success">Editar Permiso</h3>
+
+            <form method="POST" action="/procesarEdicionPermiso/{{ permiso.id_permiso }}/" id="formEditarPermiso" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Campo oculto para ID del permiso -->
+                <input type="hidden" name="id_permiso" value="{{ permiso.id_permiso }}">
+
+                <div class="row">
+                    <!-- Tipo de Permiso -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tipo de Permiso</label>
+                        <input type="text" name="tipo" class="form-control" id="tipo" value="{{ permiso.tipo }}" required>
+                    </div>
+
+                    <!-- Número de Permiso -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Número de Permiso</label>
+                        <input type="text" name="numero_permiso" class="form-control" id="numero_permiso" value="{{ permiso.numero_permiso }}" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Fecha de Emisión -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Fecha de Emisión</label>
+                        <input type="date" name="fecha_emision" class="form-control" id="fecha_emision" value="{{ permiso.fecha_emision|date:'Y-m-d' }}" required>
+                    </div>
+
+                    <!-- Fecha de Vencimiento -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Fecha de Vencimiento (Opcional)</label>
+                        <input type="date" name="fecha_vencimiento" class="form-control" id="fecha_vencimiento" value="{{ permiso.fecha_vencimiento|date:'Y-m-d' }}">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Proyecto Asociado -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Seleccione el Proyecto</label>
+                        <select name="id_proyecto" class="form-control" id="id_proyecto" required>
+                            {% for proyecto in proyectos %}
+                                <option value="{{ proyecto.id_proyecto }}" {% if proyecto.id_proyecto == permiso.id_proyecto.id_proyecto %}selected{% endif %}>
+                                    {{ proyecto.nombre }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Foto del Permiso -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Actualizar Documento/Fotografía (Opcional)</label>
+                        <input type="file" name="foto" class="form-control" id="foto" accept="image/*">
+                        {% if permiso.foto %}
+                            <p class="mt-2">Imagen actual: <a href="{{ permiso.foto.url }}" target="_blank">Ver Imagen</a></p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Botón de Guardar Cambios -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success w-50">Actualizar Permiso</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    $(document).ready(function () {
+        $("#formEditarPermiso").validate({
+            rules: {
+                "tipo": {
+                    required: true,
+                    minlength: 3
+                },
+                "numero_permiso": {
+                    required: true,
+                    minlength: 5
+                },
+                "fecha_emision": {
+                    required: true,
+                    date: true
+                },
+                "fecha_vencimiento": {
+                    date: true
+                },
+                "id_proyecto": {
+                    required: true
+                }
+            },
+            messages: {
+                "tipo": {
+                    required: "Por favor, ingrese el tipo de permiso.",
+                    minlength: "Debe tener al menos 3 caracteres."
+                },
+                "numero_permiso": {
+                    required: "Por favor, ingrese el número de permiso.",
+                    minlength: "Debe tener al menos 5 caracteres."
+                },
+                "fecha_emision": {
+                    required: "Seleccione una fecha de emisión.",
+                    date: "Ingrese una fecha válida."
+                },
+                "fecha_vencimiento": {
+                    date: "Ingrese una fecha válida."
+                },
+                "id_proyecto": {
+                    required: "Seleccione un proyecto asociado."
+                }
+            }
+        });
+
+        $('#foto').fileinput({
+            language: "es",
+            allowedFileExtensions: ["png", "jpg", "jpeg", "pdf"],
+            dropZoneEnabled: true
+        });
+    });
+</script>
+
+<style>
+    label.error {
+        color: white;
+        font-weight: bold;
+        background-color: red;
+        border-radius: 10px;
+        padding: 5px;
+        margin-top: 5px;
+    }
+    input.error, textarea.error, select.error {
+        border: 1px solid red;
+    }
+</style>
+
+{% endblock %}

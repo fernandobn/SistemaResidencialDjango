@@ -1,0 +1,111 @@
+{% extends "plantilla.html" %}
+{% load static %}
+
+{% block contenido %}
+<main class="main d-flex justify-content-center align-items-center vh-100">
+
+<div class="bg-light">
+    <nav class="navbar navbar-expand navbar-light navbar-bg">
+        <a class="sidebar-toggle js-sidebar-toggle">
+            <i class="hamburger align-self-center"></i>
+        </a>
+    </nav>
+    <br>
+    <div class="row justify-content-center">
+        <!-- Listado de Proyectos -->
+        <div class="col-md-10 col-lg-10"> <!-- Ajustado para mayor ancho en pantallas grandes -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Listado de Proyectos</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive"> <!-- Hace la tabla adaptable a pantallas pequeñas -->
+                        <table class="table table-striped" id="tbl_proyectos">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Fin</th>
+                                    <th>Ubicación</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for proyecto in proyectos %}
+                                <tr>
+                                    <td>{{ proyecto.id_proyecto }}</td>
+                                    <td>{{ proyecto.nombre }}</td>
+                                    <td>{{ proyecto.descripcion }}</td>
+                                    <td>{{ proyecto.fecha_inicio }}</td>
+                                    <td>{% if proyecto.fecha_fin %}{{ proyecto.fecha_fin }}{% else %}No definida{% endif %}</td>
+                                    <td>{{ proyecto.id_ubicacion.direccion }} - {{ proyecto.id_ubicacion.ciudad }}</td>
+                                    <td>
+                                        <a href="/editarProyecto/{{ proyecto.id_proyecto }}" class="btn btn-info btn-sm rounded-pill mb-2">Editar</a>
+                                        <button onclick="showDeleteConfirmation({{ proyecto.id_proyecto }}, 'proyecto')" class="btn btn-danger btn-sm rounded-pill mb-2">Eliminar</button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center">No hay proyectos registrados.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#tbl_proyectos').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ],
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+            }
+        });
+    });
+
+    function showDeleteConfirmation(id, tipo) {
+        if (confirm(`¿Seguro que deseas eliminar este ${tipo}?`)) {
+            fetch(`/eliminarProyecto/${id}/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) {
+                    location.reload();
+                }
+            });
+        }
+    }
+</script>
+
+<style>
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    /* Ajuste para aumentar el ancho de la tabla */
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+</style>
+</main>
+{% endblock %}

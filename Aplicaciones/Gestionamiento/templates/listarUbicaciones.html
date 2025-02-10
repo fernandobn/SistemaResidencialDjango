@@ -1,0 +1,111 @@
+{% extends "plantilla.html" %}
+{% load static %}
+
+{% block contenido %}
+<main class="main d-flex justify-content-center align-items-center vh-100">
+
+<div class="bg-light">
+    <nav class="navbar navbar-expand navbar-light navbar-bg">
+        <a class="sidebar-toggle js-sidebar-toggle">
+            <i class="hamburger align-self-center"></i>
+        </a>
+    </nav>
+    <br>
+    <div class="row justify-content-center">
+        <!-- Listado de Ubicaciones -->
+        <div class="col-md-10 col-lg-10"> <!-- Ajustado para mayor ancho en pantallas grandes -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Listado de Ubicaciones</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive"> <!-- Hace la tabla adaptable a pantallas pequeñas -->
+                        <table class="table table-striped" id="tbl_ubicaciones">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Dirección</th>
+                                    <th>Ciudad</th>
+                                    <th>Estado</th>
+                                    <th>Código Postal</th>
+                                    <th>País</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ubicacion in ubicaciones %}
+                                <tr>
+                                    <td>{{ ubicacion.id_ubicacion }}</td>
+                                    <td>{{ ubicacion.direccion }}</td>
+                                    <td>{{ ubicacion.ciudad }}</td>
+                                    <td>{{ ubicacion.estado }}</td>
+                                    <td>{{ ubicacion.codigo_postal }}</td>
+                                    <td>{{ ubicacion.pais }}</td>
+                                    <td>
+                                        <a href="/editarUbicacion/{{ ubicacion.id_ubicacion }}" class="btn btn-info btn-sm rounded-pill mb-2">Editar</a>
+                                        <button onclick="showDeleteConfirmation({{ ubicacion.id_ubicacion }}, 'ubicacion')" class="btn btn-danger btn-sm rounded-pill mb-2">Eliminar</button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center">No hay ubicaciones registradas.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#tbl_ubicaciones').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ],
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+            }
+        });
+    });
+
+    function showDeleteConfirmation(id, tipo) {
+        if (confirm(`¿Seguro que deseas eliminar esta ${tipo}?`)) {
+            fetch(`/eliminarUbicacion/${id}/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) {
+                    location.reload();
+                }
+            });
+        }
+    }
+</script>
+
+<style>
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    /* Ajuste para aumentar el ancho de la tabla */
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+</style>
+</main>
+{% endblock %}

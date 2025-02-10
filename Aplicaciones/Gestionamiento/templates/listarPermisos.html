@@ -1,0 +1,124 @@
+{% extends "plantilla.html" %}
+{% load static %}
+
+{% block contenido %}
+<main class="main d-flex justify-content-center align-items-center vh-100">
+
+    <div class="bg-light">
+        <nav class="navbar navbar-expand navbar-light navbar-bg">
+            <a class="sidebar-toggle js-sidebar-toggle">
+                <i class="hamburger align-self-center"></i>
+            </a>
+        </nav>
+        <br>
+        <div class="row justify-content-center">
+            <!-- Listado de Permisos -->
+            <div class="col-md-10 col-lg-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Listado de Permisos</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="tbl_permisos">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tipo</th>
+                                        <th>Número</th>
+                                        <th>Fecha Emisión</th>
+                                        <th>Fecha Vencimiento</th>
+                                        <th>Proyecto</th>
+                                        <th>Documento</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for permiso in permisos %}
+                                    <tr>
+                                        <td>{{ permiso.id_permiso }}</td>
+                                        <td>{{ permiso.tipo }}</td>
+                                        <td>{{ permiso.numero_permiso }}</td>
+                                        <td>{{ permiso.fecha_emision }}</td>
+                                        <td>{% if permiso.fecha_vencimiento %}{{ permiso.fecha_vencimiento }}{% else %}No definida{% endif %}</td>
+                                        <td>{{ permiso.id_proyecto.nombre }}</td>
+                                        <td>
+                                            {% if permiso.foto %}
+                                                <a href="{{ permiso.foto.url }}" target="_blank">
+                                                    <img src="{{ permiso.foto.url }}" alt="Documento del Permiso" height="100px" width="100px">
+                                                </a><br>
+                                                <a download href="{{ permiso.foto.url }}">Descargar Documento</a>
+                                            {% else %}
+                                                <p>No hay documento disponible.</p>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="/editarPermiso/{{ permiso.id_permiso }}" class="btn btn-info btn-sm rounded-pill mb-2">Editar</a>
+                                            <button onclick="showDeleteConfirmation({{ permiso.id_permiso }}, 'permiso')" class="btn btn-danger btn-sm rounded-pill mb-2">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="8" class="text-center">No hay permisos registrados.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    $(document).ready(function() {
+        $('#tbl_permisos').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ],
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+            }
+        });
+    });
+
+    function showDeleteConfirmation(id, tipo) {
+        if (confirm(`¿Seguro que deseas eliminar este ${tipo}?`)) {
+            fetch(`/eliminarPermiso/${id}/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) {
+                    location.reload();
+                }
+            });
+        }
+    }
+</script>
+
+<style>
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    /* Ajuste para aumentar el ancho de la tabla */
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+</style>
+
+{% endblock %}

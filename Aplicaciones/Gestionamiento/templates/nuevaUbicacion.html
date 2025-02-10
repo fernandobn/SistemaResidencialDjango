@@ -1,0 +1,126 @@
+{% extends "plantilla.html" %}
+{% load static %}
+{% block contenido %}
+
+<main class="main d-flex justify-content-center align-items-center vh-100">
+
+    <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%;">
+        <h3 class="text-center mb-4 text-primary">Registrar Ubicación</h3>
+
+        <form method="POST" action="/guardarUbicacion/" id="formUbicacion">
+            {% csrf_token %}
+
+            <!-- Dirección -->
+            <div class="mb-3">
+                <label class="form-label">Ingrese la Dirección</label>
+                <input type="text" name="direccion" class="form-control" id="direccion" placeholder="Ej. Calle Principal #123" required>
+            </div>
+
+            <!-- Ciudad -->
+            <div class="mb-3">
+                <label class="form-label">Ingrese la Ciudad</label>
+                <input type="text" name="ciudad" class="form-control" id="ciudad" placeholder="Ej. Madrid" required>
+            </div>
+
+            <!-- Estado -->
+            <div class="mb-3">
+                <label class="form-label">Ingrese el Estado</label>
+                <input type="text" name="estado" class="form-control" id="estado" placeholder="Ej. Comunidad de Madrid" required>
+            </div>
+
+            <!-- Código Postal -->
+            <div class="mb-3">
+                <label class="form-label">Ingrese el Código Postal</label>
+                <input type="text" name="codigo_postal" class="form-control" id="codigo_postal" placeholder="Ej. 28001" required>
+            </div>
+
+            <!-- País -->
+            <div class="mb-3">
+                <label class="form-label">Ingrese el País</label>
+                <input type="text" name="pais" class="form-control" id="pais" placeholder="Ej. España" required>
+            </div>
+
+            <!-- Botón de Guardar -->
+            <button type="submit" class="btn btn-primary w-100">Guardar Ubicación</button>
+        </form>
+    </div>
+
+</main>
+
+<script>
+    $(document).ready(function () {
+        $("#formUbicacion").validate({
+            rules: {
+                "direccion": {
+                    required: true,
+                    minlength: 5
+                },
+                "ciudad": {
+                    required: true,
+                    minlength: 3,
+                    letras: true
+                },
+                "estado": {
+                    required: true,
+                    minlength: 3,
+                    letras: true
+                },
+                "codigo_postal": {
+                    required: true,
+                    digits: true,
+                    minlength: 4
+                },
+                "pais": {
+                    required: true,
+                    letras: true
+                }
+            },
+            messages: {
+                "direccion": {
+                    required: "Por favor, ingrese la dirección.",
+                    minlength: "La dirección debe tener al menos 5 caracteres."
+                },
+                "ciudad": {
+                    required: "Por favor, ingrese la ciudad.",
+                    minlength: "El nombre de la ciudad debe tener al menos 3 caracteres.",
+                    letras: "Este campo solo acepta letras."
+                },
+                "estado": {
+                    required: "Por favor, ingrese el estado.",
+                    minlength: "El estado debe tener al menos 3 caracteres.",
+                    letras: "Este campo solo acepta letras."
+                },
+                "codigo_postal": {
+                    required: "Por favor, ingrese el código postal.",
+                    digits: "El código postal debe contener solo números.",
+                    minlength: "El código postal debe tener al menos 4 dígitos."
+                },
+                "pais": {
+                    required: "Por favor, ingrese el país.",
+                    letras: "Este campo solo acepta letras."
+                }
+            }
+        });
+    });
+
+    // Validación personalizada para solo letras
+    jQuery.validator.addMethod("letras", function(value, element) {            
+        return this.optional(element) || /^[A-Za-zÁÉÍÓÚÑáéíóúñ ]*$/.test(value);
+    }, "Este campo solo acepta letras.");
+</script>
+
+<style>
+    label.error {
+        color: white;
+        font-weight: bold;
+        background-color: red;
+        border-radius: 10px;
+        padding: 5px;
+        margin-top: 5px;
+    }
+    input.error, textarea.error {
+        border: 1px solid red;
+    }
+</style>
+
+{% endblock %}

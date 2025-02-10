@@ -1,0 +1,116 @@
+{% extends "plantilla.html" %}
+{% load static %}
+{% block contenido %}
+
+<main class="main d-flex justify-content-center align-items-center vh-100">
+
+    <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%;">
+        <h3 class="text-center mb-4 text-primary">Registrar Proyecto</h3>
+
+        <form method="POST" action="/guardarProyecto/" id="formProyecto">
+            {% csrf_token %}
+
+            <!-- Nombre del Proyecto -->
+            <div class="mb-3">
+                <label class="form-label">Ingrese el Nombre del Proyecto</label>
+                <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Ej. Residencial Oasis" required>
+            </div>
+
+            <!-- Descripción -->
+            <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea name="descripcion" class="form-control" id="descripcion" placeholder="Ingrese una descripción del proyecto" rows="3" required></textarea>
+            </div>
+
+            <!-- Fecha de Inicio -->
+            <div class="mb-3">
+                <label class="form-label">Fecha de Inicio</label>
+                <input type="date" name="fecha_inicio" class="form-control" id="fecha_inicio" required>
+            </div>
+
+            <!-- Fecha de Finalización -->
+            <div class="mb-3">
+                <label class="form-label">Fecha de Finalización (Opcional)</label>
+                <input type="date" name="fecha_fin" class="form-control" id="fecha_fin">
+            </div>
+
+            <!-- Ubicación -->
+            <div class="mb-3">
+                <label class="form-label">Seleccione la Ubicación</label>
+                <select name="id_ubicacion" class="form-control" id="id_ubicacion" required>
+                    <option value="">Seleccione una ubicación</option>
+                    {% for ubicacion in ubicaciones %}
+                        <option value="{{ ubicacion.id_ubicacion }}">{{ ubicacion.direccion }} - {{ ubicacion.ciudad }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Botón de Guardar -->
+            <button type="submit" class="btn btn-primary w-100">Guardar Proyecto</button>
+        </form>
+    </div>
+
+</main>
+
+<script>
+    $(document).ready(function () {
+        $("#formProyecto").validate({
+            rules: {
+                "nombre": {
+                    required: true,
+                    minlength: 5
+                },
+                "descripcion": {
+                    required: true,
+                    minlength: 10
+                },
+                "fecha_inicio": {
+                    required: true,
+                    date: true
+                },
+                "fecha_fin": {
+                    date: true
+                },
+                "id_ubicacion": {
+                    required: true
+                }
+            },
+            messages: {
+                "nombre": {
+                    required: "Por favor, ingrese el nombre del proyecto.",
+                    minlength: "El nombre debe tener al menos 5 caracteres."
+                },
+                "descripcion": {
+                    required: "Por favor, ingrese una descripción.",
+                    minlength: "La descripción debe tener al menos 10 caracteres."
+                },
+                "fecha_inicio": {
+                    required: "Seleccione una fecha de inicio.",
+                    date: "Ingrese una fecha válida."
+                },
+                "fecha_fin": {
+                    date: "Ingrese una fecha válida."
+                },
+                "id_ubicacion": {
+                    required: "Seleccione una ubicación para el proyecto."
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    label.error {
+        color: white;
+        font-weight: bold;
+        background-color: red;
+        border-radius: 10px;
+        padding: 5px;
+        margin-top: 5px;
+    }
+    input.error, textarea.error, select.error {
+        border: 1px solid red;
+    }
+</style>
+
+{% endblock %}

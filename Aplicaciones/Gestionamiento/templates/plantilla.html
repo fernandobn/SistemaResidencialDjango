@@ -1,0 +1,279 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>ProyResidenciales</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <!--Jquert-->
+  <script src="{% static 'js/jquery-3.7.1.js' %}"></script>
+  <script src="{% static 'js/jquery.validate.js' %}"></script>
+
+  <link rel="stylesheet" href="{% static 'izitoast/iziToast.min.css' %}">
+  <script src="{% static 'izitoast/iziToast.min.js' %}"></script>
+
+
+  <link rel="stylesheet" href="{% static 'datatables/dataTables.dataTables.min.css' %}">
+  <script src="{% static 'datatables/dataTables.min.js' %}"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+   <!--cdn para datatables-->
+   <script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.js"></script>
+   <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.dataTables.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+   <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.5.4/js/fileinput.min.js" integrity="sha512-0wQvB58Ha5coWmcgtg4f11CTSSxfrfLClUp9Vy0qhzYzCZDSnoB4Vhu5JXJFs7rU24LE6JsH+6hpP7vQ22lk5w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.5.4/js/locales/es.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.5.4/css/fileinput.min.css" integrity="sha512-yDVMONIXJPPAoULZ92Ygngsn8ZUGB4ejm6fCc6q9ZvdH8blFAOgg75XZSEaAJ5m4E/yPI1BAi5fF2axMHVuZ5w==" crossorigin="anonymous" referrerpolicy="no-referrer" /></head>
+   <script src="https://cdn.datatables.net/plug-ins/1.12.1/i18n/Spanish.json"></script>
+
+  <!-- Favicons -->
+  <link href="{% static 'plantilla/assets/img/gestion-de-proyectos.ico' %}" rel="icon">
+  <link href="{% static 'plantilla/assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Raleway:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'plantilla/assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'plantilla/assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'plantilla/assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'plantilla/assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'plantilla/assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'plantilla/assets/css/main.css' %}" rel="stylesheet">
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+      <a href="/" class="logo d-flex align-items-center me-auto">
+        <h1 class="sitename">ProyResidenciales</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="" class="active">Inicio</a></li>
+          <li><a href="/nuevaUbicacion/">Ubicación</a></li>
+          <li><a href="/nuevoProyecto/">Proyecto</a></li>
+          <li><a href="/nuevoPresupuesto/">Presupuesto</a></li>
+          <li><a href="/nuevoPermiso/">Permiso</a></li>
+          <li class="dropdown"><a href="#"><span>Listado</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="/listarUbicaciones/">Listado Ubicación</a></li>
+              <li><a href="/listarProyectos/">Listado Proyecto</a></li>
+              <li><a href="/listarPresupuestos/">Listado Presupuesto</a></li>
+              <li><a href="/listarPermisos/">Listado Permiso</a></li>
+            </ul>
+          </li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    {% block contenido %}
+    {% endblock %}
+  </main>
+
+  <footer id="footer" class="footer dark-background">
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-about">
+          <a href="/" class="logo d-flex align-items-center">
+            <span class="sitename">ProyResidenciales</span>
+          </a>
+          <div class="footer-contact pt-3">
+            <p>Ecuador, Cotopaxi</p>
+            <p>San Felipe Universidad Técnica de Cotopaxi</p>
+            <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
+            <p><strong>Email:</strong> <span>info@example.com</span></p>
+          </div>
+          <div class="social-links d-flex mt-4">
+            <a href=""><i class="bi bi-twitter-x"></i></a>
+            <a href=""><i class="bi bi-facebook"></i></a>
+            <a href=""><i class="bi bi-instagram"></i></a>
+            <a href=""><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Enlaces Útiles</h4>
+          <ul>
+            <li><i class="bi bi-chevron-right"></i> <a href="#">Inicio</a></li>
+            <li><i class="bi bi-chevron-right"></i> <a href="#">Sobre Nosotros</a></li>
+            <li><i class="bi bi-chevron-right"></i> <a href="#">Servicios</a></li>
+            <li><i class="bi bi-chevron-right"></i> <a href="#">Términos del Servicio</a></li>
+            <li><i class="bi bi-chevron-right"></i> <a href="#">Política de Privacidad</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Nuestros Servicios</h4>
+          <ul>
+            <li><i class="bi bi-chevron-right"></i> <a href="#">Diseño Web</a></li>
+            <li><i class="bi bi-chevron-right"></i> <a href="#">Desarrollo Web</a></li>
+            <li><i class="bi bi-chevron-right"></i> <a href="#">Gestión de Productos</a></li>
+            <li><i class="bi bi-chevron-right"></i> <a href="#">Marketing</a></li>
+            <li><i class="bi bi-chevron-right"></i> <a href="#">Diseño Gráfico</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">Dewi</strong> <span>Todos los derechos reservados</span></p>
+      <div class="credits">
+        Diseñado por <a href="">Henrry Barrionuevo</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'plantilla/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'plantilla/assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'plantilla/assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'plantilla/assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'plantilla/assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'plantilla/assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'plantilla/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'plantilla/assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'plantilla/assets/js/main.js' %}"></script>
+  {% if messages %}
+{% for mensajeConfirmacion in messages %}
+    <script>
+        // Función para mostrar el mensaje de éxito
+        function showSuccessMessage(message) {
+            iziToast.success({
+                title: 'Confirmación',
+                message: message,
+                position: 'topRight'
+            });
+        }
+
+        // Función para mostrar el mensaje de error
+        function showErrorMessage(message) {
+            iziToast.error({
+                title: 'Error',
+                message: message,
+                position: 'topRight'
+            });
+        }
+
+        // Verifica el tipo de mensaje y llama a la función correspondiente
+        if ("{{ mensajeConfirmacion.tags }}" == "success") {
+            showSuccessMessage('{{ mensajeConfirmacion }}');
+        } else if ("{{ mensajeConfirmacion.tags }}" == "error") {
+            showErrorMessage('{{ mensajeConfirmacion }}');
+        }
+    </script>
+    
+{% endfor %}
+{% endif %}
+<script>
+  function showDeleteConfirmation(id, tipo) {
+      let url = '';
+      let message = '';
+
+      // Configurar la URL y el mensaje de confirmación según el tipo
+      if (tipo === 'ubicacion') {
+          url = `/eliminarUbicacion/${id}/`;
+          message = '¿Estás seguro de que deseas eliminar esta ubicación?';
+      } else if (tipo === 'proyecto') {
+          url = `/eliminarProyecto/${id}/`;
+          message = '¿Estás seguro de que deseas eliminar este proyecto?';
+      } else if (tipo === 'presupuesto') {
+          url = `/eliminarPresupuesto/${id}/`;
+          message = '¿Estás seguro de que deseas eliminar este presupuesto?';
+      } else if (tipo === 'permiso') {
+          url = `/eliminarPermiso/${id}/`;
+          message = '¿Estás seguro de que deseas eliminar este permiso?';
+    }
+
+      // Mostrar la pregunta de confirmación en el centro con iziToast
+      iziToast.question({
+          timeout: 20000,
+          close: false,
+          overlay: true,
+          displayMode: 'once',
+          id: 'question',
+          zindex: 999,
+          title: 'Confirmación',
+          message: message,
+          position: 'center',  // Mensaje en el centro de la pantalla
+          buttons: [
+              ['<button><b>SÍ</b></button>', function (instance, toast) {
+                  fetch(url, {
+                      method: 'POST',
+                      headers: {
+                          'X-CSRFToken': '{{ csrf_token }}', // CSRF para seguridad
+                      },
+                  })
+                  .then(response => response.json())  // Procesar la respuesta JSON
+                  .then(data => {
+                      if (data.success) {
+                          // Notificación de éxito
+                          iziToast.success({
+                              title: 'Éxito',
+                              message: data.message,
+                              timeout: 5000,
+                              position: 'topRight'  
+                          });
+                      } else {
+                          // Notificación de error
+                          iziToast.error({
+                              title: 'Error',
+                              message: data.message || `No se pudo eliminar ${tipo}.`,
+                              timeout: 5000,
+                              position: 'topRight'  
+                          });
+                      }
+                      // Esperar antes de recargar la página
+                      setTimeout(() => location.reload(), 2000); 
+                  })
+                  .catch(error => {
+                      // Mensaje de error en caso de fallo en la eliminación
+                      iziToast.error({
+                          title: 'Error',
+                          message: 'Ocurrió un problema al intentar eliminar.',
+                          timeout: 5000,
+                          position: 'topRight'  
+                      });
+                  });
+
+                  instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+              }, true],
+
+              ['<button>NO</button>', function (instance, toast) {
+                  instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+              }]
+          ]
+      });
+  }
+</script>
+
+
+
+</body>
+</html>
