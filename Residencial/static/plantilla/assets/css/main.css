@@ -222,14 +222,26 @@ h6 {
 # Global Header
 --------------------------------------------------------------*/
 .header {
-  --background-color: rgba(0, 0, 0, 0);
+  --background-color: #39434c; /* Color de fondo fijo */
   --default-color: #ffffff;
   --heading-color: #ffffff;
+  
   color: var(--default-color);
   background-color: var(--background-color);
   padding: 20px 0;
-  transition: all 0.5s;
-  z-index: 997;
+  position: fixed; /* Fijar en la parte superior */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* Si hay alguna clase que lo oculta, forzamos su visibilidad */
+.header.hidden {
+  display: block !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }
 
 .header .logo {
